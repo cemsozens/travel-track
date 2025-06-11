@@ -49,10 +49,9 @@ class TravelProvider extends ChangeNotifier {
     if (index != -1) {
       _wishlistCountries.removeAt(index);
     } else {
-      // Don't add to wishlist if already visited
-      if (!_visitedCountries.any((c) => c.code == countryCode)) {
-        _wishlistCountries.add(country);
-      }
+      _wishlistCountries.add(country);
+      // Remove from visited if added to wishlist
+      _visitedCountries.removeWhere((c) => c.code == countryCode);
     }
     
     _saveData();

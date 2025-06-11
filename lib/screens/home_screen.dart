@@ -411,13 +411,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 Expanded(
                   child: FilledButton.icon(
                     onPressed: () {
+                      // Check the current state BEFORE toggling
+                      final wasVisited = travelProvider.isCountryVisited(countryCode);
                       travelProvider.toggleCountryVisited(countryCode, countryName);
                       Navigator.pop(context);
                       // Show a snackbar with feedback
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
-                            travelProvider.isCountryVisited(countryCode)
+                            wasVisited
                               ? '$countryName removed from visited countries'
                               : '$countryName added to visited countries!',
                           ),
@@ -441,13 +443,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 Expanded(
                   child: OutlinedButton.icon(
                     onPressed: () {
+                      // Check the current state BEFORE toggling
+                      final wasInWishlist = travelProvider.isCountryInWishlist(countryCode);
                       travelProvider.toggleCountryWishlist(countryCode, countryName);
                       Navigator.pop(context);
                       // Show a snackbar with feedback
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
-                            travelProvider.isCountryInWishlist(countryCode)
+                            wasInWishlist
                               ? '$countryName removed from wishlist'
                               : '$countryName added to wishlist!',
                           ),
