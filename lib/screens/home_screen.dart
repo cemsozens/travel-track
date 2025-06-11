@@ -14,6 +14,156 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // Country code to country name mapping
+  static const Map<String, String> _countryNames = {
+    'us': 'United States',
+    'ca': 'Canada',
+    'mx': 'Mexico',
+    'br': 'Brazil',
+    'ar': 'Argentina',
+    'cl': 'Chile',
+    'pe': 'Peru',
+    'co': 'Colombia',
+    've': 'Venezuela',
+    'uy': 'Uruguay',
+    'py': 'Paraguay',
+    'bo': 'Bolivia',
+    'ec': 'Ecuador',
+    'gy': 'Guyana',
+    'sr': 'Suriname',
+    'gf': 'French Guiana',
+    'gb': 'United Kingdom',
+    'fr': 'France',
+    'de': 'Germany',
+    'it': 'Italy',
+    'es': 'Spain',
+    'pt': 'Portugal',
+    'nl': 'Netherlands',
+    'be': 'Belgium',
+    'ch': 'Switzerland',
+    'at': 'Austria',
+    'se': 'Sweden',
+    'no': 'Norway',
+    'dk': 'Denmark',
+    'fi': 'Finland',
+    'is': 'Iceland',
+    'ie': 'Ireland',
+    'pl': 'Poland',
+    'cz': 'Czech Republic',
+    'sk': 'Slovakia',
+    'hu': 'Hungary',
+    'ro': 'Romania',
+    'bg': 'Bulgaria',
+    'rs': 'Serbia',
+    'hr': 'Croatia',
+    'si': 'Slovenia',
+    'ba': 'Bosnia and Herzegovina',
+    'me': 'Montenegro',
+    'mk': 'North Macedonia',
+    'al': 'Albania',
+    'gr': 'Greece',
+    'tr': 'Turkey',
+    'cy': 'Cyprus',
+    'ru': 'Russia',
+    'ua': 'Ukraine',
+    'by': 'Belarus',
+    'md': 'Moldova',
+    'lt': 'Lithuania',
+    'lv': 'Latvia',
+    'ee': 'Estonia',
+    'cn': 'China',
+    'jp': 'Japan',
+    'kr': 'South Korea',
+    'kp': 'North Korea',
+    'mn': 'Mongolia',
+    'in': 'India',
+    'pk': 'Pakistan',
+    'af': 'Afghanistan',
+    'ir': 'Iran',
+    'iq': 'Iraq',
+    'sy': 'Syria',
+    'lb': 'Lebanon',
+    'jo': 'Jordan',
+    'il': 'Israel',
+    'ps': 'Palestine',
+    'sa': 'Saudi Arabia',
+    'ae': 'United Arab Emirates',
+    'qa': 'Qatar',
+    'kw': 'Kuwait',
+    'bh': 'Bahrain',
+    'om': 'Oman',
+    'ye': 'Yemen',
+    'eg': 'Egypt',
+    'ly': 'Libya',
+    'tn': 'Tunisia',
+    'dz': 'Algeria',
+    'ma': 'Morocco',
+    'sd': 'Sudan',
+    'et': 'Ethiopia',
+    'ke': 'Kenya',
+    'tz': 'Tanzania',
+    'ug': 'Uganda',
+    'rw': 'Rwanda',
+    'bi': 'Burundi',
+    'cd': 'Democratic Republic of Congo',
+    'cg': 'Republic of Congo',
+    'cf': 'Central African Republic',
+    'cm': 'Cameroon',
+    'td': 'Chad',
+    'ne': 'Niger',
+    'ng': 'Nigeria',
+    'bf': 'Burkina Faso',
+    'ml': 'Mali',
+    'sn': 'Senegal',
+    'gn': 'Guinea',
+    'sl': 'Sierra Leone',
+    'lr': 'Liberia',
+    'ci': 'Ivory Coast',
+    'gh': 'Ghana',
+    'tg': 'Togo',
+    'bj': 'Benin',
+    'za': 'South Africa',
+    'na': 'Namibia',
+    'bw': 'Botswana',
+    'zw': 'Zimbabwe',
+    'zm': 'Zambia',
+    'mw': 'Malawi',
+    'mz': 'Mozambique',
+    'mg': 'Madagascar',
+    'au': 'Australia',
+    'nz': 'New Zealand',
+    'pg': 'Papua New Guinea',
+    'fj': 'Fiji',
+    'th': 'Thailand',
+    'vn': 'Vietnam',
+    'la': 'Laos',
+    'kh': 'Cambodia',
+    'mm': 'Myanmar',
+    'my': 'Malaysia',
+    'sg': 'Singapore',
+    'id': 'Indonesia',
+    'ph': 'Philippines',
+    'bn': 'Brunei',
+    'tl': 'East Timor',
+    'lk': 'Sri Lanka',
+    'mv': 'Maldives',
+    'bd': 'Bangladesh',
+    'bt': 'Bhutan',
+    'np': 'Nepal',
+    'uz': 'Uzbekistan',
+    'kz': 'Kazakhstan',
+    'kg': 'Kyrgyzstan',
+    'tj': 'Tajikistan',
+    'tm': 'Turkmenistan',
+    'az': 'Azerbaijan',
+    'am': 'Armenia',
+    'ge': 'Georgia',
+  };
+
+  String _getCountryName(String countryCode) {
+    return _countryNames[countryCode.toLowerCase()] ?? countryCode.toUpperCase();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +201,7 @@ class _HomeScreenState extends State<HomeScreen> {
               
               // World Map
               SliverToBoxAdapter(
-                child: Container(
+                                child: Container(
                   margin: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
@@ -63,31 +213,36 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                                      child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Container(
-                        color: Theme.of(context).colorScheme.surface,
-                        child: SizedBox(
-                          height: 400, // Fixed height for the map
-                          child: InteractiveViewer(
-                            minScale: 0.5,
-                            maxScale: 75.0,
-                            constrained: true,
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.92,
-                              child: SimpleMap(
-                                instructions: SMapWorld.instructions,
-                                defaultColor: Colors.grey.shade300,
-                                colors: _createCountryColorsMap(travelProvider),
-                                callback: (id, name, tapDetails) {
-                                  _onCountryTapped(context, travelProvider, id, name);
-                                },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                      color: Theme.of(context).colorScheme.surface,
+                      child: Stack(
+                        children: [
+                          SizedBox(
+                            height: 400, // Fixed height for the map
+                            child: InteractiveViewer(
+                              minScale: 0.5,
+                              maxScale: 75.0,
+                              constrained: true,
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.92,
+                                child: SimpleMap(
+                                  instructions: SMapWorld.instructions,
+                                  defaultColor: Colors.grey.shade300,
+                                  colors: _createCountryColorsMap(travelProvider),
+                                  callback: (id, name, tapDetails) {
+                                    final countryName = _getCountryName(id);
+                                    _onCountryTapped(context, travelProvider, id, countryName);
+                                  },
+                                ),
                               ),
                             ),
                           ),
-                        ),
+                        ],
                       ),
                     ),
+                  ),
                 ),
               ),
               
@@ -194,18 +349,63 @@ class _HomeScreenState extends State<HomeScreen> {
     showModalBottomSheet(
       context: context,
       showDragHandle: true,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
       builder: (context) => Container(
         padding: const EdgeInsets.all(24),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              countryName,
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+            // Country header with name and code
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        countryName.isNotEmpty ? countryName : 'Unknown Country',
+                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Country Code: $countryCode',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // Status indicator
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: _getStatusColor(travelProvider, countryCode),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    _getStatusText(travelProvider, countryCode),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 24),
+            
+            // Action buttons
             Row(
               children: [
                 Expanded(
@@ -213,16 +413,27 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: () {
                       travelProvider.toggleCountryVisited(countryCode, countryName);
                       Navigator.pop(context);
+                      // Show a snackbar with feedback
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            travelProvider.isCountryVisited(countryCode)
+                              ? '$countryName removed from visited countries'
+                              : '$countryName added to visited countries!',
+                          ),
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
                     },
                     icon: Icon(
                       travelProvider.isCountryVisited(countryCode)
-                          ? Icons.check_circle
-                          : Icons.add_circle_outline,
+                          ? Icons.remove_circle
+                          : Icons.add_circle,
                     ),
                     label: Text(
                       travelProvider.isCountryVisited(countryCode)
-                          ? 'Remove from Visited'
-                          : 'Mark as Visited',
+                          ? 'Remove Visited'
+                          : 'Mark Visited',
                     ),
                   ),
                 ),
@@ -232,6 +443,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: () {
                       travelProvider.toggleCountryWishlist(countryCode, countryName);
                       Navigator.pop(context);
+                      // Show a snackbar with feedback
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            travelProvider.isCountryInWishlist(countryCode)
+                              ? '$countryName removed from wishlist'
+                              : '$countryName added to wishlist!',
+                          ),
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
                     },
                     icon: Icon(
                       travelProvider.isCountryInWishlist(countryCode)
@@ -240,17 +462,38 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     label: Text(
                       travelProvider.isCountryInWishlist(countryCode)
-                          ? 'Remove from Wishlist'
-                          : 'Add to Wishlist',
+                          ? 'Remove Wishlist'
+                          : 'Add Wishlist',
                     ),
                   ),
                 ),
               ],
             ),
+            const SizedBox(height: 8),
           ],
         ),
       ),
     );
+  }
+  
+  Color _getStatusColor(TravelProvider travelProvider, String countryCode) {
+    if (travelProvider.isCountryVisited(countryCode)) {
+      return Colors.green.shade400;
+    } else if (travelProvider.isCountryInWishlist(countryCode)) {
+      return Colors.orange.shade400;
+    } else {
+      return Colors.grey.shade400;
+    }
+  }
+  
+  String _getStatusText(TravelProvider travelProvider, String countryCode) {
+    if (travelProvider.isCountryVisited(countryCode)) {
+      return 'Visited';
+    } else if (travelProvider.isCountryInWishlist(countryCode)) {
+      return 'Wishlist';
+    } else {
+      return 'Not Visited';
+    }
   }
   
   void _showCountryListSheet(BuildContext context, TravelProvider travelProvider) {
@@ -278,4 +521,6 @@ class _HomeScreenState extends State<HomeScreen> {
     
     return colorMap;
   }
+
+
 } 
