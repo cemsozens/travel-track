@@ -170,6 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Consumer<TravelProvider>(
         builder: (context, travelProvider, child) {
           return CustomScrollView(
+            physics: const ClampingScrollPhysics(),
             slivers: [
               // App Bar
               SliverAppBar.large(
@@ -222,9 +223,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(
                             height: 320, // Reduced height for tighter fit
                             child: InteractiveViewer(
-                              minScale: 0.8,
+                              minScale: 0.3,
                               maxScale: 75.0,
                               constrained: true,
+                              panEnabled: true,
+                              scaleEnabled: true,
                               child: SizedBox(
                                 width: MediaQuery.of(context).size.width,
                                 child: SimpleMap(
