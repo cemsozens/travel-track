@@ -259,14 +259,24 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
-                    body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+                    body: SafeArea(
+            child: SingleChildScrollView(
+              physics: const NeverScrollableScrollPhysics(),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height - 
+                      MediaQuery.of(context).padding.top - 
+                      MediaQuery.of(context).padding.bottom -
+                      kToolbarHeight,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
               // Travel Statistics
               Center(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.only(left: 4, right: 4, top: 2, bottom: 0),
                   child: TravelStatsCard(
                     visitedCount: travelProvider.visitedCount,
                     wishlistCount: travelProvider.wishlistCount,
@@ -277,10 +287,18 @@ class _HomeScreenState extends State<HomeScreen> {
               // World Map
               Center(
                 child: Container(
-                height: 400, // Fixed height for better zoom control
-                margin: const EdgeInsets.only(top: 4, bottom: 2, left: 8, right: 8),
+                height: MediaQuery.of(context).size.width < 400 
+                    ? MediaQuery.of(context).size.height * 0.40   // 40% for small devices
+                    : MediaQuery.of(context).size.width < 600
+                    ? MediaQuery.of(context).size.height * 0.50  // 50% for large phones (like iPhone Pro Max)
+                    : MediaQuery.of(context).size.height * 0.55, // 55% for tablets/very large devices
+                margin: const EdgeInsets.only(top: 0, bottom: 2, left: 4, right: 4),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                    width: 1,
+                  ),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.1),
@@ -302,7 +320,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       boundaryMargin: const EdgeInsets.all(20),
                       child: SizedBox(
                         width: MediaQuery.of(context).size.width,
-                        height: 400,
+                        height: MediaQuery.of(context).size.width < 400 
+                            ? MediaQuery.of(context).size.height * 0.40   // 40% for small devices
+                            : MediaQuery.of(context).size.width < 600
+                            ? MediaQuery.of(context).size.height * 0.50  // 50% for large phones (like iPhone Pro Max)
+                            : MediaQuery.of(context).size.height * 0.55, // 55% for tablets/very large devices
                         child: SimpleMap(
                           instructions: SMapWorld.instructions,
                           defaultColor: Colors.grey.shade300,
@@ -325,8 +347,13 @@ class _HomeScreenState extends State<HomeScreen> {
               // Legend
               Center(
                 child: Container(
-                margin: const EdgeInsets.all(8),
-                padding: const EdgeInsets.all(16),
+                margin: const EdgeInsets.only(
+                  left: 4,
+                  right: 4,
+                  top: 4,
+                  bottom: 20,
+                ),
+                padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surfaceContainerHigh,
                   borderRadius: BorderRadius.circular(12),
@@ -340,21 +367,20 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 8),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         _buildLegendItem(
                           context,
                           Colors.green.shade400,
                           'Visited',
                         ),
-                        const SizedBox(width: 20),
                         _buildLegendItem(
                           context,
                           Colors.orange.shade400,
                           'Wishlist',
                         ),
-                        const SizedBox(width: 20),
                         _buildLegendItem(
                           context,
                           Colors.grey.shade300,
@@ -362,7 +388,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 8),
                     Row(
                       children: [
                         Icon(
@@ -384,6 +410,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ],
+                ),
+              ),
+            ),
           ),
         );
       },

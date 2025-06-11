@@ -15,21 +15,41 @@ class TravelStatsCard extends StatelessWidget {
     const totalCountries = 195; // Approximate number of countries
     final visitedPercentage = (visitedCount / totalCountries * 100).round();
     
+    // Responsive design based on screen width
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isSmallDevice = screenWidth < 400;
+    final isMediumDevice = screenWidth >= 400 && screenWidth < 600;
+    
+    // Responsive padding - more generous on larger screens
+    final cardPadding = isSmallDevice ? 8.0 : (isMediumDevice ? 16.0 : 24.0);
+    
+    // Responsive spacing - more generous on larger screens
+    final titleSpacing = isSmallDevice ? 6.0 : (isMediumDevice ? 12.0 : 16.0);
+    final progressSpacing = isSmallDevice ? 6.0 : (isMediumDevice ? 10.0 : 14.0);
+    final bottomSpacing = isSmallDevice ? 3.0 : (isMediumDevice ? 6.0 : 8.0);
+    
+    // Responsive text styles
+    final titleStyle = isSmallDevice 
+        ? Theme.of(context).textTheme.titleSmall
+        : (isMediumDevice ? Theme.of(context).textTheme.titleMedium : Theme.of(context).textTheme.titleLarge);
+    
+    final bottomTextSize = isSmallDevice ? 11.0 : (isMediumDevice ? 12.0 : 14.0);
+    
     return Card(
       elevation: 0,
       color: Theme.of(context).colorScheme.primaryContainer,
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: EdgeInsets.all(cardPadding),
         child: Column(
           children: [
             Text(
               'Travel Progress',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              style: titleStyle?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).colorScheme.onPrimaryContainer,
               ),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: titleSpacing),
             Row(
               children: [
                 Expanded(
@@ -39,11 +59,13 @@ class TravelStatsCard extends StatelessWidget {
                     '$visitedCount',
                     'Countries Visited',
                     Colors.green,
+                    isSmallDevice,
+                    isMediumDevice,
                   ),
                 ),
                 Container(
                   width: 1,
-                  height: 35,
+                  height: isSmallDevice ? 25.0 : (isMediumDevice ? 45.0 : 60.0),
                   color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
                 ),
                 Expanded(
@@ -53,11 +75,13 @@ class TravelStatsCard extends StatelessWidget {
                     '$wishlistCount',
                     'On Wishlist',
                     Colors.orange,
+                    isSmallDevice,
+                    isMediumDevice,
                   ),
                 ),
                 Container(
                   width: 1,
-                  height: 35,
+                  height: isSmallDevice ? 25.0 : (isMediumDevice ? 45.0 : 60.0),
                   color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
                 ),
                 Expanded(
@@ -67,11 +91,13 @@ class TravelStatsCard extends StatelessWidget {
                     '$visitedPercentage%',
                     'World Explored',
                     Theme.of(context).colorScheme.primary,
+                    isSmallDevice,
+                    isMediumDevice,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: progressSpacing),
             LinearProgressIndicator(
               value: visitedCount / totalCountries,
               backgroundColor: Theme.of(context).colorScheme.outline.withOpacity(0.2),
@@ -79,10 +105,11 @@ class TravelStatsCard extends StatelessWidget {
                 Theme.of(context).colorScheme.primary,
               ),
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: bottomSpacing),
             Text(
               '$visitedCount of $totalCountries countries visited',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                fontSize: bottomTextSize,
                 color: Theme.of(context).colorScheme.onPrimaryContainer.withOpacity(0.7),
               ),
             ),
@@ -98,18 +125,33 @@ class TravelStatsCard extends StatelessWidget {
     String value,
     String label,
     Color iconColor,
+    bool isSmallDevice,
+    bool isMediumDevice,
   ) {
+    // Responsive icon size - larger on big screens
+    final iconSize = isSmallDevice ? 16.0 : (isMediumDevice ? 24.0 : 32.0);
+    
+    // Responsive spacing - more generous on larger screens
+    final iconSpacing = isSmallDevice ? 2.0 : (isMediumDevice ? 6.0 : 8.0);
+    
+    // Responsive text styles
+    final valueStyle = isSmallDevice 
+        ? Theme.of(context).textTheme.titleMedium
+        : (isMediumDevice ? Theme.of(context).textTheme.titleLarge : Theme.of(context).textTheme.headlineSmall);
+    
+    final labelSize = isSmallDevice ? 10.0 : (isMediumDevice ? 12.0 : 14.0);
+    
     return Column(
       children: [
         Icon(
           icon,
-          size: 20,
+          size: iconSize,
           color: iconColor,
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: iconSpacing),
         Text(
           value,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+          style: valueStyle?.copyWith(
             fontWeight: FontWeight.bold,
             color: Theme.of(context).colorScheme.onPrimaryContainer,
           ),
@@ -117,6 +159,7 @@ class TravelStatsCard extends StatelessWidget {
         Text(
           label,
           style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            fontSize: labelSize,
             color: Theme.of(context).colorScheme.onPrimaryContainer.withOpacity(0.7),
           ),
           textAlign: TextAlign.center,
