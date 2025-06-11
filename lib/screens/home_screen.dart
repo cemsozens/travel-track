@@ -63,20 +63,31 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Container(
-                      color: Theme.of(context).colorScheme.surface,
-                      child: SimpleMap(
-                        instructions: SMapWorld.instructions,
-                        defaultColor: Colors.grey.shade300,
-                        colors: _createCountryColorsMap(travelProvider),
-                        callback: (id, name, tapDetails) {
-                          _onCountryTapped(context, travelProvider, id, name);
-                        },
+                                      child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Container(
+                        color: Theme.of(context).colorScheme.surface,
+                        child: SizedBox(
+                          height: 400, // Fixed height for the map
+                          child: InteractiveViewer(
+                            minScale: 0.5,
+                            maxScale: 75.0,
+                            constrained: true,
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.92,
+                              child: SimpleMap(
+                                instructions: SMapWorld.instructions,
+                                defaultColor: Colors.grey.shade300,
+                                colors: _createCountryColorsMap(travelProvider),
+                                callback: (id, name, tapDetails) {
+                                  _onCountryTapped(context, travelProvider, id, name);
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
                 ),
               ),
               
@@ -117,6 +128,23 @@ class _HomeScreenState extends State<HomeScreen> {
                             context,
                             Colors.grey.shade300,
                             'Not visited',
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.zoom_in,
+                            size: 16,
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            'Pinch to zoom • Drag to pan • Tap countries to mark',
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            ),
                           ),
                         ],
                       ),
