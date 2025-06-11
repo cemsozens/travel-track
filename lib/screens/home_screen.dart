@@ -5,6 +5,7 @@ import 'package:countries_world_map/data/maps/world_map.dart';
 import '../providers/travel_provider.dart';
 import '../widgets/travel_stats_card.dart';
 import '../widgets/country_list_sheet.dart';
+import '../widgets/country_search_delegate.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,11 +15,34 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // Country code to country name mapping
+  // Country code to country name mapping (All 195 countries with ISO 3166-1 alpha-2 codes)
   static const Map<String, String> _countryNames = {
+    // North America
     'us': 'United States',
     'ca': 'Canada',
     'mx': 'Mexico',
+    'gt': 'Guatemala',
+    'bz': 'Belize',
+    'sv': 'El Salvador',
+    'hn': 'Honduras',
+    'ni': 'Nicaragua',
+    'cr': 'Costa Rica',
+    'pa': 'Panama',
+    'cu': 'Cuba',
+    'jm': 'Jamaica',
+    'ht': 'Haiti',
+    'do': 'Dominican Republic',
+    'tt': 'Trinidad and Tobago',
+    'bb': 'Barbados',
+    'gd': 'Grenada',
+    'vc': 'Saint Vincent and the Grenadines',
+    'lc': 'Saint Lucia',
+    'dm': 'Dominica',
+    'ag': 'Antigua and Barbuda',
+    'kn': 'Saint Kitts and Nevis',
+    'bs': 'Bahamas',
+    
+    // South America
     'br': 'Brazil',
     'ar': 'Argentina',
     'cl': 'Chile',
@@ -32,6 +56,8 @@ class _HomeScreenState extends State<HomeScreen> {
     'gy': 'Guyana',
     'sr': 'Suriname',
     'gf': 'French Guiana',
+    
+    // Europe
     'gb': 'United Kingdom',
     'fr': 'France',
     'de': 'Germany',
@@ -64,6 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
     'gr': 'Greece',
     'tr': 'Turkey',
     'cy': 'Cyprus',
+    'mt': 'Malta',
     'ru': 'Russia',
     'ua': 'Ukraine',
     'by': 'Belarus',
@@ -71,6 +98,14 @@ class _HomeScreenState extends State<HomeScreen> {
     'lt': 'Lithuania',
     'lv': 'Latvia',
     'ee': 'Estonia',
+    'lu': 'Luxembourg',
+    'mc': 'Monaco',
+    'ad': 'Andorra',
+    'sm': 'San Marino',
+    'va': 'Vatican City',
+    'li': 'Liechtenstein',
+    
+    // Asia
     'cn': 'China',
     'jp': 'Japan',
     'kr': 'South Korea',
@@ -93,47 +128,6 @@ class _HomeScreenState extends State<HomeScreen> {
     'bh': 'Bahrain',
     'om': 'Oman',
     'ye': 'Yemen',
-    'eg': 'Egypt',
-    'ly': 'Libya',
-    'tn': 'Tunisia',
-    'dz': 'Algeria',
-    'ma': 'Morocco',
-    'sd': 'Sudan',
-    'et': 'Ethiopia',
-    'ke': 'Kenya',
-    'tz': 'Tanzania',
-    'ug': 'Uganda',
-    'rw': 'Rwanda',
-    'bi': 'Burundi',
-    'cd': 'Democratic Republic of Congo',
-    'cg': 'Republic of Congo',
-    'cf': 'Central African Republic',
-    'cm': 'Cameroon',
-    'td': 'Chad',
-    'ne': 'Niger',
-    'ng': 'Nigeria',
-    'bf': 'Burkina Faso',
-    'ml': 'Mali',
-    'sn': 'Senegal',
-    'gn': 'Guinea',
-    'sl': 'Sierra Leone',
-    'lr': 'Liberia',
-    'ci': 'Ivory Coast',
-    'gh': 'Ghana',
-    'tg': 'Togo',
-    'bj': 'Benin',
-    'za': 'South Africa',
-    'na': 'Namibia',
-    'bw': 'Botswana',
-    'zw': 'Zimbabwe',
-    'zm': 'Zambia',
-    'mw': 'Malawi',
-    'mz': 'Mozambique',
-    'mg': 'Madagascar',
-    'au': 'Australia',
-    'nz': 'New Zealand',
-    'pg': 'Papua New Guinea',
-    'fj': 'Fiji',
     'th': 'Thailand',
     'vn': 'Vietnam',
     'la': 'Laos',
@@ -158,6 +152,82 @@ class _HomeScreenState extends State<HomeScreen> {
     'az': 'Azerbaijan',
     'am': 'Armenia',
     'ge': 'Georgia',
+    
+    // Africa
+    'eg': 'Egypt',
+    'ly': 'Libya',
+    'tn': 'Tunisia',
+    'dz': 'Algeria',
+    'ma': 'Morocco',
+    'sd': 'Sudan',
+    'ss': 'South Sudan',
+    'et': 'Ethiopia',
+    'er': 'Eritrea',
+    'dj': 'Djibouti',
+    'so': 'Somalia',
+    'ke': 'Kenya',
+    'tz': 'Tanzania',
+    'ug': 'Uganda',
+    'rw': 'Rwanda',
+    'bi': 'Burundi',
+    'cd': 'Democratic Republic of Congo',
+    'cg': 'Republic of Congo',
+    'cf': 'Central African Republic',
+    'cm': 'Cameroon',
+    'td': 'Chad',
+    'ne': 'Niger',
+    'ng': 'Nigeria',
+    'bf': 'Burkina Faso',
+    'ml': 'Mali',
+    'mr': 'Mauritania',
+    'sn': 'Senegal',
+    'gm': 'Gambia',
+    'gw': 'Guinea-Bissau',
+    'gn': 'Guinea',
+    'sl': 'Sierra Leone',
+    'lr': 'Liberia',
+    'ci': 'Ivory Coast',
+    'gh': 'Ghana',
+    'tg': 'Togo',
+    'bj': 'Benin',
+    'za': 'South Africa',
+    'na': 'Namibia',
+    'bw': 'Botswana',
+    'zw': 'Zimbabwe',
+    'zm': 'Zambia',
+    'mw': 'Malawi',
+    'mz': 'Mozambique',
+    'mg': 'Madagascar',
+    'mu': 'Mauritius',
+    'sc': 'Seychelles',
+    'km': 'Comoros',
+    'cv': 'Cape Verde',
+    'st': 'São Tomé and Príncipe',
+    'gq': 'Equatorial Guinea',
+    'ga': 'Gabon',
+    'ao': 'Angola',
+    'ls': 'Lesotho',
+    'sz': 'Eswatini',
+    
+    // Oceania
+    'au': 'Australia',
+    'nz': 'New Zealand',
+    'pg': 'Papua New Guinea',
+    'fj': 'Fiji',
+    'sb': 'Solomon Islands',
+    'vu': 'Vanuatu',
+    'nc': 'New Caledonia',
+    'pf': 'French Polynesia',
+    'ck': 'Cook Islands',
+    'nu': 'Niue',
+    'to': 'Tonga',
+    'ws': 'Samoa',
+    'ki': 'Kiribati',
+    'tv': 'Tuvalu',
+    'nr': 'Nauru',
+    'mh': 'Marshall Islands',
+    'fm': 'Micronesia',
+    'pw': 'Palau',
   };
 
   String _getCountryName(String countryCode) {
@@ -181,6 +251,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 backgroundColor: Theme.of(context).colorScheme.surface,
                 foregroundColor: Theme.of(context).colorScheme.onSurface,
                 actions: [
+                  IconButton(
+                    onPressed: () => _showCountrySearch(context, travelProvider),
+                    icon: const Icon(Icons.search),
+                    tooltip: 'Search Countries',
+                  ),
                   IconButton(
                     onPressed: () => _showCountryListSheet(context, travelProvider),
                     icon: const Icon(Icons.list_alt),
@@ -419,6 +494,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: () {
                       // Check the current state BEFORE toggling
                       final wasVisited = travelProvider.isCountryVisited(countryCode);
+                      final wasInWishlist = travelProvider.isCountryInWishlist(countryCode);
+                      
+                      if (!wasVisited && wasInWishlist) {
+                        // Remove from wishlist before adding to visited
+                        travelProvider.toggleCountryWishlist(countryCode, countryName);
+                      }
                       travelProvider.toggleCountryVisited(countryCode, countryName);
                       Navigator.pop(context);
                       // Show a snackbar with feedback
@@ -451,6 +532,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: () {
                       // Check the current state BEFORE toggling
                       final wasInWishlist = travelProvider.isCountryInWishlist(countryCode);
+                      final wasVisited = travelProvider.isCountryVisited(countryCode);
+                      
+                      if (!wasInWishlist && wasVisited) {
+                        // Remove from visited before adding to wishlist
+                        travelProvider.toggleCountryVisited(countryCode, countryName);
+                      }
                       travelProvider.toggleCountryWishlist(countryCode, countryName);
                       Navigator.pop(context);
                       // Show a snackbar with feedback
@@ -512,6 +599,13 @@ class _HomeScreenState extends State<HomeScreen> {
       isScrollControlled: true,
       showDragHandle: true,
       builder: (context) => CountryListSheet(travelProvider: travelProvider),
+    );
+  }
+  
+  void _showCountrySearch(BuildContext context, TravelProvider travelProvider) {
+    showSearch(
+      context: context,
+      delegate: CountrySearchDelegate(travelProvider),
     );
   }
   
