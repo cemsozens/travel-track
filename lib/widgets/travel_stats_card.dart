@@ -19,17 +19,17 @@ class TravelStatsCard extends StatelessWidget {
       elevation: 0,
       color: Theme.of(context).colorScheme.primaryContainer,
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(12),
         child: Column(
           children: [
             Text(
               'Travel Progress',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).colorScheme.onPrimaryContainer,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
             Row(
               children: [
                 Expanded(
@@ -43,7 +43,7 @@ class TravelStatsCard extends StatelessWidget {
                 ),
                 Container(
                   width: 1,
-                  height: 50,
+                  height: 35,
                   color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
                 ),
                 Expanded(
@@ -57,7 +57,7 @@ class TravelStatsCard extends StatelessWidget {
                 ),
                 Container(
                   width: 1,
-                  height: 50,
+                  height: 35,
                   color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
                 ),
                 Expanded(
@@ -71,7 +71,7 @@ class TravelStatsCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
             LinearProgressIndicator(
               value: visitedCount / totalCountries,
               backgroundColor: Theme.of(context).colorScheme.outline.withOpacity(0.2),
@@ -79,7 +79,7 @@ class TravelStatsCard extends StatelessWidget {
                 Theme.of(context).colorScheme.primary,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             Text(
               '$visitedCount of $totalCountries countries visited',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -103,13 +103,13 @@ class TravelStatsCard extends StatelessWidget {
       children: [
         Icon(
           icon,
-          size: 28,
+          size: 20,
           color: iconColor,
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 4),
         Text(
           value,
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.bold,
             color: Theme.of(context).colorScheme.onPrimaryContainer,
           ),

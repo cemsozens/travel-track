@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../providers/travel_provider.dart';
 import '../models/country_model.dart';
 
@@ -38,48 +39,54 @@ class _CountryListSheetState extends State<CountryListSheet>
         color: Theme.of(context).colorScheme.surface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Text(
-              'Your Travel Lists',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
+      child: Consumer<TravelProvider>(
+        builder: (context, travelProvider, child) {
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  'Your Travel Lists',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
-            ),
-          ),
-          TabBar(
-            controller: _tabController,
-            tabs: [
-              Tab(
-                icon: const Icon(Icons.flag),
-                text: 'Visited (${widget.travelProvider.visitedCount})',
+              TabBar(
+                controller: _tabController,
+                tabs: [
+                  Tab(
+                    icon: const Icon(Icons.flag),
+                    text: 'Visited (${travelProvider.visitedCount})',
+                  ),
+                  Tab(
+                    icon: const Icon(Icons.favorite),
+                    text: 'Wishlist (${travelProvider.wishlistCount})',
+                  ),
+                ],
               ),
-              Tab(
-                icon: const Icon(Icons.favorite),
-                text: 'Wishlist (${widget.travelProvider.wishlistCount})',
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    _buildCountryList(
+                      context,
+                      travelProvider.visitedCountries,
+                      true,
+                      travelProvider,
+                    ),
+                    _buildCountryList(
+                      context,
+                      travelProvider.wishlistCountries,
+                      false,
+                      travelProvider,
+                    ),
+                  ],
+                ),
               ),
             ],
-          ),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                _buildCountryList(
-                  context,
-                  widget.travelProvider.visitedCountries,
-                  true,
-                ),
-                _buildCountryList(
-                  context,
-                  widget.travelProvider.wishlistCountries,
-                  false,
-                ),
-              ],
-            ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -88,6 +95,7 @@ class _CountryListSheetState extends State<CountryListSheet>
     BuildContext context,
     List<CountryModel> countries,
     bool isVisited,
+    TravelProvider travelProvider,
   ) {
     if (countries.isEmpty) {
       return Center(
@@ -158,12 +166,12 @@ class _CountryListSheetState extends State<CountryListSheet>
               icon: const Icon(Icons.remove_circle_outline),
               onPressed: () {
                 if (isVisited) {
-                  widget.travelProvider.toggleCountryVisited(
+                  travelProvider.toggleCountryVisited(
                     country.code,
                     country.name,
                   );
                 } else {
-                  widget.travelProvider.toggleCountryWishlist(
+                  travelProvider.toggleCountryWishlist(
                     country.code,
                     country.name,
                   );

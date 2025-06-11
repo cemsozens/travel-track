@@ -191,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
               // Travel Statistics
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                   child: TravelStatsCard(
                     visitedCount: travelProvider.visitedCount,
                     wishlistCount: travelProvider.wishlistCount,
@@ -201,8 +201,8 @@ class _HomeScreenState extends State<HomeScreen> {
               
               // World Map
               SliverToBoxAdapter(
-                                child: Container(
-                  margin: const EdgeInsets.all(16),
+                child: Container(
+                  margin: const EdgeInsets.only(top: 4, bottom: 2),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
@@ -220,20 +220,23 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Stack(
                         children: [
                           SizedBox(
-                            height: 400, // Fixed height for the map
+                            height: 320, // Reduced height for tighter fit
                             child: InteractiveViewer(
-                              minScale: 0.5,
+                              minScale: 0.8,
                               maxScale: 75.0,
                               constrained: true,
                               child: SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.92,
+                                width: MediaQuery.of(context).size.width,
                                 child: SimpleMap(
                                   instructions: SMapWorld.instructions,
                                   defaultColor: Colors.grey.shade300,
                                   colors: _createCountryColorsMap(travelProvider),
                                   callback: (id, name, tapDetails) {
                                     final countryName = _getCountryName(id);
-                                    _onCountryTapped(context, travelProvider, id, countryName);
+                                    // Only show modal if country is known (not ocean/unknown area)
+                                    if (_countryNames.containsKey(id.toLowerCase())) {
+                                      _onCountryTapped(context, travelProvider, id, countryName);
+                                    }
                                   },
                                 ),
                               ),
@@ -259,7 +262,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Legend',
+                        'How to use',
                         style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -296,7 +299,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           const SizedBox(width: 6),
                           Text(
-                            'Pinch to zoom • Drag to pan • Tap countries to mark',
+                            'Pinch to zoom • Drag to pan • Tap to mark',
                             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               color: Theme.of(context).colorScheme.onSurfaceVariant,
                             ),
