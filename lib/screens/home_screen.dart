@@ -259,159 +259,137 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
-                    body: SafeArea(
-            child: SingleChildScrollView(
-              physics: const NeverScrollableScrollPhysics(),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: MediaQuery.of(context).size.height - 
-                      MediaQuery.of(context).padding.top - 
-                      MediaQuery.of(context).padding.bottom -
-                      kToolbarHeight,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-              // Travel Statistics
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 4, right: 4, top: 2, bottom: 0),
-                  child: TravelStatsCard(
-                    visitedCount: travelProvider.visitedCount,
-                    wishlistCount: travelProvider.wishlistCount,
-                  ),
-                ),
-              ),
-              
-              // World Map
-              Center(
-                child: Container(
-                height: MediaQuery.of(context).size.width < 400 
-                    ? MediaQuery.of(context).size.height * 0.40   // 40% for small devices
-                    : MediaQuery.of(context).size.width < 600
-                    ? MediaQuery.of(context).size.height * 0.50  // 50% for large phones (like iPhone Pro Max)
-                    : MediaQuery.of(context).size.height * 0.55, // 55% for tablets/very large devices
-                margin: const EdgeInsets.only(top: 0, bottom: 2, left: 4, right: 4),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
-                    width: 1,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
+          body: SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Travel Statistics
+                Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 2, right: 2, top: 8.0, bottom: 0),
+                    child: TravelStatsCard(
+                      visitedCount: travelProvider.visitedCount,
+                      wishlistCount: travelProvider.wishlistCount,
                     ),
-                  ],
+                  ),
                 ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
+                
+                // World Map
+                Expanded(
                   child: Container(
-                    color: Theme.of(context).colorScheme.surface,
-                    child: InteractiveViewer(
-                      minScale: 0.5,
-                      maxScale: 20.0,
-                      constrained: false,
-                      panEnabled: true,
-                      scaleEnabled: true,
-                      boundaryMargin: const EdgeInsets.all(20),
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.width < 400 
-                            ? MediaQuery.of(context).size.height * 0.40   // 40% for small devices
-                            : MediaQuery.of(context).size.width < 600
-                            ? MediaQuery.of(context).size.height * 0.50  // 50% for large phones (like iPhone Pro Max)
-                            : MediaQuery.of(context).size.height * 0.55, // 55% for tablets/very large devices
-                        child: SimpleMap(
-                          instructions: SMapWorld.instructions,
-                          defaultColor: Colors.grey.shade300,
-                          colors: _createCountryColorsMap(travelProvider),
-                          callback: (id, name, tapDetails) {
-                            final countryName = _getCountryName(id);
-                            // Only show modal if country is known (not ocean/unknown area)
-                            if (_countryNames.containsKey(id.toLowerCase())) {
-                              _onCountryTapped(context, travelProvider, id, countryName);
-                            }
-                          },
-                        ),
+                    margin: const EdgeInsets.only(top: 0, bottom: 2, left: 2, right: 2),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                        width: 1,
                       ),
-                    ),
-                  ),
-                ),
-                ),
-              ),
-              
-              // Legend
-              Center(
-                child: Container(
-                margin: const EdgeInsets.only(
-                  left: 4,
-                  right: 4,
-                  top: 4,
-                  bottom: 20,
-                ),
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surfaceContainerHigh,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'How to use',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        _buildLegendItem(
-                          context,
-                          Colors.green.shade400,
-                          'Visited',
-                        ),
-                        _buildLegendItem(
-                          context,
-                          Colors.orange.shade400,
-                          'Wishlist',
-                        ),
-                        _buildLegendItem(
-                          context,
-                          Colors.grey.shade300,
-                          'Not visited',
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.zoom_in,
-                          size: 16,
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
-                        const SizedBox(width: 6),
-                        Text(
-                          'Pinch to zoom • Drag to pan • Tap to mark',
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Container(
+                        color: Theme.of(context).colorScheme.surface,
+                        width: double.infinity,
+                        height: double.infinity,
+                        child: InteractiveViewer(
+                          minScale: 0.5,
+                          maxScale: 20.0,
+                          constrained: true,
+                          panEnabled: true,
+                          scaleEnabled: true,
+                          boundaryMargin: const EdgeInsets.all(0),
+                          child: SimpleMap(
+                            instructions: SMapWorld.instructions,
+                            defaultColor: Colors.grey.shade300,
+                            colors: _createCountryColorsMap(travelProvider),
+                            callback: (id, name, tapDetails) {
+                              final countryName = _getCountryName(id);
+                              // Only show modal if country is known (not ocean/unknown area)
+                              if (_countryNames.containsKey(id.toLowerCase())) {
+                                _onCountryTapped(context, travelProvider, id, countryName);
+                              }
+                            },
                           ),
                         ),
+                      ),
+                    ),
+                  ),
+                ),
+                
+                // Legend
+                Center(
+                  child: Container(
+                    margin: const EdgeInsets.only(
+                      left: 2,
+                      right: 2,
+                      top: 4,
+                      bottom: 20,
+                    ),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surfaceContainerHigh,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'How to use',
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            _buildLegendItem(
+                              context,
+                              Colors.green.shade400,
+                              'Visited',
+                            ),
+                            _buildLegendItem(
+                              context,
+                              Colors.orange.shade400,
+                              'Wishlist',
+                            ),
+                            _buildLegendItem(
+                              context,
+                              Colors.grey.shade300,
+                              'Not visited',
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.zoom_in,
+                              size: 16,
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              'Pinch to zoom • Drag to pan • Tap to mark',
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
-                ),
-              ),
-            ],
-                ),
-              ),
+              ],
             ),
           ),
         );
