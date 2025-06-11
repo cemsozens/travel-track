@@ -1,0 +1,40 @@
+name: travel_map_flutter
+description: A beautiful travel map app built with Flutter
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: ">=3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # World map widget with country interaction
+  countries_world_map: ^1.3.0
+  
+  # State management
+  provider: ^6.1.2
+  
+  # Local storage for visited countries
+  shared_preferences: ^2.2.3
+  
+  # Icons
+  cupertino_icons: ^1.0.6
+  
+  # Material 3 design
+  material_color_utilities: ^0.11.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - assets/images/
+  
+ 
