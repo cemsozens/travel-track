@@ -1,4 +1,4 @@
-# 🌍 Travel Map Flutter App
+# 🌍 TravelTracks! Flutter App
 
 A beautiful, interactive travel map app built with Flutter that helps you track visited countries and plan future travels.
 

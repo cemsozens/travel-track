@@ -241,7 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return Scaffold(
           appBar: AppBar(
             title: const Text(
-              'Travel Map',
+              'TravelTracks!',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             backgroundColor: Theme.of(context).colorScheme.surface,
